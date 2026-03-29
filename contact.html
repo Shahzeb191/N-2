@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="gold">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Contact — N² Restaurant</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+  <link rel="stylesheet" href="css/style.css"/>
+</head>
+<body>
+
+  <div id="progress-bar"></div>
+  <div id="loader"><div class="ldr-logo">N<sup>²</sup></div><div class="ldr-tagline">Contact Us</div><div class="ldr-bar"></div></div>
+  <div class="page-trans" id="page-trans"></div>
+  <div class="cursor-dot" id="cursor-dot"></div>
+  <div class="cursor-ring" id="cursor-ring"></div>
+
+  <!-- Floating Buttons -->
+  <div class="float-btns">
+    <a href="https://wa.me/919876543210?text=Hello%20N%C2%B2!" class="float-btn wa" target="_blank" rel="noopener" data-tip="WhatsApp Us"><i class="fa-brands fa-whatsapp"></i></a>
+    <a href="tel:+919876543210" class="float-btn call" data-tip="Call Us"><i class="fa-solid fa-phone"></i></a>
+  </div>
+
+  <!-- Theme -->
+  <button id="theme-btn"><i class="fa-solid fa-palette"></i></button>
+  <div id="theme-panel">
+    <h6>Theme</h6>
+    <div class="th-swatches">
+      <div class="swatch active" data-theme="gold"><div class="sw-dot" style="background:#C9A84C"></div><span class="sw-lbl">Gold</span></div>
+      <div class="swatch" data-theme="emerald"><div class="sw-dot" style="background:#4CAF82"></div><span class="sw-lbl">Emerald</span></div>
+      <div class="swatch" data-theme="rose"><div class="sw-dot" style="background:#C97878"></div><span class="sw-lbl">Rose</span></div>
+      <div class="swatch" data-theme="ivory"><div class="sw-dot" style="background:#D4C5A9"></div><span class="sw-lbl">Ivory</span></div>
+      <div class="swatch" data-theme="sapphire"><div class="sw-dot" style="background:#6A9BC9"></div><span class="sw-lbl">Sapphire</span></div>
+    </div>
+  </div>
+
+  <!-- Navbar -->
+  <nav id="navbar">
+    <a href="index.html" class="nav-logo" id="nav-logo-link">N<sup>²</sup></a>
+    <ul class="nav-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="menu.html">Menu</a></li>
+      <li><a href="about.html">Our Story</a></li>
+      <li><a href="gallery.html">Gallery</a></li>
+      <li><a href="events.html">Events</a></li>
+      <li><a href="contact.html" class="active">Contact</a></li>
+    </ul>
+    <a href="reservations.html" class="nav-cta"><span>Reserve</span></a>
+    <div class="hamburger" id="hamburger"><span></span><span></span><span></span></div>
+  </nav>
+  <nav class="mob-nav" id="mob-nav">
+    <a href="index.html">Home</a><a href="menu.html">Menu</a><a href="about.html">Our Story</a>
+    <a href="gallery.html">Gallery</a><a href="events.html">Events</a><a href="contact.html">Contact</a>
+    <div class="mob-divider"></div>
+    <a href="reservations.html">Reserve a Table</a>
+  </nav>
+
+  <!-- Page Header -->
+  <section class="contact-header">
+    <div class="contact-header-inner">
+
+      <div>
+        <span class="sec-label rev">Reach Out</span>
+        <h1 class="sec-title rev d1">Let's <em>Connect</em></h1>
+        <div class="gold-rule rev d2"></div>
+        <p class="body-p rev d2">Questions, private events, or just a hello — we'd love to hear from you. We respond within 2 hours during operating hours.</p>
+
+        <div class="quick-contacts rev d3">
+          <a href="tel:+919876543210" class="qc-item">
+            <div class="qc-icon"><i class="fa-solid fa-phone"></i></div>
+            <div><span class="qc-label">Call Us</span><span class="qc-value">+91 98765 43210</span></div>
+          </a>
+          <a href="https://wa.me/919876543210" target="_blank" rel="noopener" class="qc-item">
+            <div class="qc-icon" style="color:#25d366"><i class="fa-brands fa-whatsapp"></i></div>
+            <div><span class="qc-label">WhatsApp</span><span class="qc-value">+91 98765 43210</span></div>
+          </a>
+          <a href="mailto:hello@nsquare.in" class="qc-item">
+            <div class="qc-icon"><i class="fa-solid fa-envelope"></i></div>
+            <div><span class="qc-label">Email</span><span class="qc-value">hello@nsquare.in</span></div>
+          </a>
+          <div class="qc-item" style="cursor:default">
+            <div class="qc-icon"><i class="fa-solid fa-location-dot"></i></div>
+            <div><span class="qc-label">Address</span><span class="qc-value">Near Railway Station, Main Road, Aonla, UP 243301</span></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="ch-hours rev-right">
+        <div class="ch-hours-title"><i class="fa-regular fa-clock" style="margin-right:8px"></i>Opening Hours</div>
+        <div class="ch-hours-row"><span class="ch-day">Monday – Friday</span><span class="ch-time">12 PM – 3:30 PM · 7 PM – 11 PM</span></div>
+        <div class="ch-hours-row"><span class="ch-day">Saturday</span><span class="ch-time">11 AM – 11:30 PM</span></div>
+        <div class="ch-hours-row"><span class="ch-day">Sunday</span><span class="ch-time">11 AM – 11:30 PM</span></div>
+        <div class="ch-hours-row"><span class="ch-day">Public Holidays</span><span class="ch-time">Call to confirm</span></div>
+        <div class="ch-status-row" id="live-status"></div>
+        <div style="margin-top:1.8rem">
+          <a href="reservations.html" class="btn btn-primary" style="width:100%;justify-content:center">
+            <i class="fa-solid fa-calendar-check"></i><span>Book a Table</span>
+          </a>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- Map + Form -->
+  <section class="contact-main">
+    <div class="contact-main-inner">
+
+      <!-- Map Panel -->
+      <div class="map-panel">
+        <div class="map-panel-label"><i class="fa-solid fa-location-dot"></i> Find Us — Aonla, UP 243301</div>
+        <div class="map-wrap">
+          <iframe
+            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d55877.123!2d79.5607!3d28.2679!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x390afef59999999b%3A0xabcdef1234567890!2sAonla%2C%20Uttar%20Pradesh%20243301!5e0!3m2!1sen!2sin!4v1700000000000!5m2!1sen!2sin"
+            allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"
+            title="N² Restaurant — Aonla, UP"
+          ></iframe>
+          <div class="map-address-card">
+            <div class="mac-label">N² Restaurant</div>
+            <div class="mac-addr">Near Railway Station<br>Main Road, Aonla, UP 243301</div>
+          </div>
+        </div>
+        <div class="map-directions">
+          <a href="https://maps.google.com/?q=Aonla+UP+243301" target="_blank" rel="noopener">Get Directions</a>
+          <span>+91 98765 43210</span>
+        </div>
+      </div>
+
+      <!-- Contact Form -->
+      <div class="contact-form-panel">
+        <h2 class="cf-heading">Send a <em>Message</em></h2>
+        <p class="cf-sub">We'll get back to you within 2 hours.</p>
+
+        <div id="cf-form-wrap">
+          <form class="cf-form" id="contact-form" novalidate>
+            <div class="form-grid">
+              <div class="form-group">
+                <label>Your Name <span class="req">*</span></label>
+                <input type="text" id="cf-name" placeholder="Full name" required/>
+              </div>
+              <div class="form-group">
+                <label>Phone Number</label>
+                <input type="tel" id="cf-phone" placeholder="+91 XXXXX XXXXX"/>
+              </div>
+              <div class="form-group">
+                <label>Email Address <span class="req">*</span></label>
+                <input type="email" id="cf-email" placeholder="your@email.com" required/>
+              </div>
+              <div class="form-group">
+                <label>Subject</label>
+                <select id="cf-subject">
+                  <option value="" disabled selected>Select subject</option>
+                  <option>General Inquiry</option>
+                  <option>Private Event</option>
+                  <option>Menu Question</option>
+                  <option>Feedback</option>
+                  <option>Press / Media</option>
+                  <option>Other</option>
+                </select>
+              </div>
+              <div class="form-group full">
+                <label>Message <span class="req">*</span></label>
+                <textarea id="cf-message" placeholder="How can we help you?" rows="4" required></textarea>
+              </div>
+            </div>
+            <button type="submit" class="cf-submit">
+              <i class="fa-solid fa-paper-plane"></i><span>Send Message</span>
+            </button>
+          </form>
+        </div>
+
+        <div class="cf-success" id="cf-success">
+          <i class="fa-solid fa-circle-check"></i>
+          <h3>Message <em>Sent!</em></h3>
+          <p>Thank you! We'll reply within 2 hours during operating hours.</p>
+          <button class="btn btn-outline" onclick="location.reload()" style="margin-top:1rem"><span>Send Another</span></button>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- Bottom Strip -->
+  <div class="contact-strip">
+    <div class="strip-inner">
+      <div class="strip-block rev">
+        <div class="strip-icon"><i class="fa-brands fa-instagram"></i></div>
+        <div class="strip-title">Follow Us</div>
+        <a href="#">@nsquare.aonla</a>
+        <a href="#">Facebook: N² Restaurant</a>
+      </div>
+      <div class="strip-block rev d2">
+        <div class="strip-icon"><i class="fa-solid fa-utensils"></i></div>
+        <div class="strip-title">Reservations</div>
+        <a href="tel:+919876543210">+91 98765 43210</a>
+        <a href="reservations.html">Book Online</a>
+      </div>
+      <div class="strip-block rev d3">
+        <div class="strip-icon"><i class="fa-solid fa-envelope-open-text"></i></div>
+        <div class="strip-title">Email Us</div>
+        <a href="mailto:hello@nsquare.in">hello@nsquare.in</a>
+        <a href="mailto:events@nsquare.in">events@nsquare.in</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer id="main-footer">
+    <div class="foot-top">
+      <div class="foot-brand">
+        <a href="index.html" class="nav-logo" id="footer-logo">N<sup>²</sup></a>
+        <p>Where flavour meets precision. Pure vegetarian fine dining in Aonla, UP.</p>
+        <div class="socials">
+          <a href="#" class="soc-a"><i class="fa-brands fa-instagram"></i></a>
+          <a href="#" class="soc-a"><i class="fa-brands fa-facebook-f"></i></a>
+          <a href="#" class="soc-a"><i class="fa-brands fa-x-twitter"></i></a>
+          <a href="#" class="soc-a"><i class="fa-brands fa-youtube"></i></a>
+        </div>
+      </div>
+      <div class="foot-col">
+        <h4>Navigate</h4>
+        <a href="index.html">Home</a><a href="menu.html">Menu</a>
+        <a href="about.html">Our Story</a><a href="gallery.html">Gallery</a>
+        <a href="events.html">Events</a><a href="contact.html">Contact</a>
+      </div>
+      <div class="foot-col">
+        <h4>Dining</h4>
+        <a href="reservations.html">Reserve a Table</a>
+        <a href="menu.html">Chef's Specials</a>
+        <a href="events.html">Private Events</a>
+      </div>
+      <div class="foot-col">
+        <h4>Find Us</h4>
+        <p>Near Railway Station, Main Road<br>Aonla, Bareilly, UP 243301</p>
+        <p>+91 98765 43210</p><p>hello@nsquare.in</p>
+      </div>
+    </div>
+    <div class="foot-bottom">
+      <p>© 2024 N² Restaurant · All rights reserved.</p>
+      <p>Crafted with <span class="heart">♥</span> & precision</p>
+    </div>
+  </footer>
+  <div id="scroll-top-btn"><i class="fa-solid fa-arrow-up"></i></div>
+
+  <script src="js/main.js"></script>
+  <script>
+    /* Logo */
+    (function(){
+      const logo = localStorage.getItem('n2_logo');
+      if (!logo) return;
+      ['#nav-logo-link','#footer-logo'].forEach(sel => {
+        const el = document.querySelector(sel);
+        if (el) el.innerHTML = `<img src="${logo}" alt="N² Logo" style="height:44px;width:auto;object-fit:contain">`;
+      });
+    })();
+
+    /* Live open/closed status */
+    (function(){
+      const now  = new Date();
+      const day  = now.getDay();
+      const h    = now.getHours() + now.getMinutes() / 60;
+      const open = (day >= 1 && day <= 5)
+        ? ((h >= 12 && h < 15.5) || (h >= 19 && h < 23))
+        : (h >= 11 && h < 23.5);
+      const el = document.getElementById('live-status');
+      if (!el) return;
+      el.innerHTML = open
+        ? '<div class="status-dot open"></div><span class="status-text open">Open Now</span>'
+        : '<div class="status-dot closed"></div><span class="status-text closed">Currently Closed</span>';
+    })();
+
+    /* Form — demo submit */
+    document.getElementById('contact-form').addEventListener('submit', function(e) {
+      e.preventDefault();
+      if (!document.getElementById('cf-name').value.trim() ||
+          !document.getElementById('cf-email').value.trim() ||
+          !document.getElementById('cf-message').value.trim()) {
+        showToast('Please fill all required fields.', 'error');
+        return;
+      }
+      document.getElementById('cf-form-wrap').style.display = 'none';
+      document.getElementById('cf-success').classList.add('show');
+    });
+  </script>
+
+</body>
+</html>

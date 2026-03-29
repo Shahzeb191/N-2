@@ -1,0 +1,1331 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="gold">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Menu — N² Restaurant</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400;1,600&family=Cinzel:wght@400;600;700&family=DM+Sans:wght@300;400;500&family=Great+Vibes&display=swap" rel="stylesheet"/>
+  <style>
+
+/* ── THEME TOKENS ── */
+:root,[data-theme="gold"]{--acc:#C9A84C;--acc-b:#E8C96A;--acc-rgb:201,168,76;--btn:#3d6b4f;--btn-h:#4a8463;}
+[data-theme="emerald"]{--acc:#4CAF82;--acc-b:#6DD4A4;--acc-rgb:76,175,130;--btn:#1a6b45;--btn-h:#2a8a5a;}
+[data-theme="rose"]{--acc:#C97878;--acc-b:#E8A0A0;--acc-rgb:201,120,120;--btn:#6b2a2a;--btn-h:#8a3a3a;}
+[data-theme="ivory"]{--acc:#D4C5A9;--acc-b:#EDE0C8;--acc-rgb:212,197,169;--btn:#5a4a2a;--btn-h:#7a6a3a;}
+[data-theme="sapphire"]{--acc:#6A9BC9;--acc-b:#8ABDE8;--acc-rgb:106,155,201;--btn:#1a3a6b;--btn-h:#2a5a8a;}
+
+:root {
+  --black:   #080808;
+  --dark:    #101010;
+  --dark2:   #161616;
+  --dark3:   #202020;
+  --cream:   #F5F0E8;
+  --cdim:    #b5ac9a;
+  --muted:   #6a6255;
+  --border:  rgba(var(--acc-rgb), 0.15);
+  --gdot:    #5cb85c;
+}
+
+*, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+html { scroll-behavior:smooth; }
+body {
+  background: var(--black);
+  color: var(--cream);
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 300;
+  overflow-x: hidden;
+  cursor: none;
+}
+
+/* Grain */
+body::after {
+  content:''; position:fixed; inset:0;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23g)'/%3E%3C/svg%3E");
+  opacity:.03; pointer-events:none; z-index:9000;
+}
+
+/* Scrollbar */
+::-webkit-scrollbar { width:4px; }
+::-webkit-scrollbar-track { background:var(--dark); }
+::-webkit-scrollbar-thumb { background:var(--acc); border-radius:2px; }
+
+/* ── CURSOR ── */
+#cd, #cr {
+  position:fixed; top:0; left:0;
+  border-radius:50%; pointer-events:none;
+  transform:translate(-50%,-50%);
+}
+#cd { width:8px; height:8px; background:var(--acc); z-index:9999; }
+#cr {
+  width:32px; height:32px;
+  border:1.5px solid rgba(var(--acc-rgb),.65);
+  z-index:9998;
+  transition:width .22s ease, height .22s ease, background .22s, border-color .22s;
+}
+#cr.hov { width:50px; height:50px; border-color:var(--acc); background:rgba(var(--acc-rgb),.06); }
+#cr.clk { width:18px; height:18px; background:rgba(var(--acc-rgb),.3); }
+
+/* Ripple */
+.rburst {
+  position:fixed; pointer-events:none; z-index:9997; border-radius:50%;
+  border:1.5px solid rgba(var(--acc-rgb),.7);
+  transform:translate(-50%,-50%) scale(0);
+  animation:rb .65s ease forwards;
+}
+@keyframes rb {
+  0%{width:0;height:0;opacity:1;transform:translate(-50%,-50%) scale(0);}
+  60%{opacity:.4;}
+  100%{width:80px;height:80px;opacity:0;transform:translate(-50%,-50%) scale(1);}
+}
+
+/* ── PROGRESS BAR ── */
+#prog {
+  position:fixed; top:0; left:0; height:2px; width:0%;
+  background:linear-gradient(90deg, var(--acc), var(--acc-b));
+  z-index:10001; transition:width .1s linear;
+}
+
+/* ── THEME PANEL ── */
+#tbtn {
+  position:fixed; right:0; top:50%; transform:translateY(-50%);
+  width:34px; height:34px; background:var(--dark2);
+  border:1px solid var(--border); border-right:none;
+  display:flex; align-items:center; justify-content:center;
+  color:var(--acc); font-size:.8rem; cursor:pointer; z-index:500;
+  border-radius:4px 0 0 4px; transition:background .3s, color .3s;
+}
+#tbtn:hover { background:var(--acc); color:var(--black); }
+#tpanel {
+  position:fixed; right:-190px; top:50%; transform:translateY(-50%);
+  width:170px; background:var(--dark2); border:1px solid var(--border);
+  padding:18px 14px; z-index:499;
+  transition:right .45s cubic-bezier(.25,.46,.45,.94);
+  border-radius:8px 0 0 8px;
+}
+#tpanel.open { right:0; }
+#tpanel h6 {
+  font-family:'Cinzel',serif; font-size:.52rem; letter-spacing:.32em;
+  color:var(--muted); text-transform:uppercase; margin-bottom:12px;
+}
+.swatches { display:flex; flex-direction:column; gap:8px; }
+.sw {
+  display:flex; align-items:center; gap:9px; cursor:pointer;
+  padding:6px 9px; border:1px solid transparent;
+  border-radius:3px; transition:border-color .3s, background .3s;
+}
+.sw:hover, .sw.on { border-color:var(--acc); background:rgba(var(--acc-rgb),.07); }
+.sw-c { width:13px; height:13px; border-radius:50%; flex-shrink:0; }
+.sw-n { font-family:'Cinzel',serif; font-size:.56rem; letter-spacing:.12em; color:var(--cdim); text-transform:uppercase; }
+
+/* ── NAVBAR ── */
+nav {
+  position:fixed; top:0; left:0; right:0; z-index:1000;
+  display:flex; align-items:center; justify-content:space-between;
+  padding:0 5.5%; height:86px;
+  transition:all .5s cubic-bezier(.25,.46,.45,.94);
+}
+nav.sc {
+  height:62px; background:rgba(8,8,8,.97);
+  border-bottom:1px solid var(--border); backdrop-filter:blur(20px);
+}
+.logo {
+  font-family:'Cormorant Garamond',serif;
+  font-size:2rem; font-style:italic; color:var(--acc);
+  transition:transform .3s;
+}
+.logo:hover { transform:scale(1.04); }
+.logo sup { font-size:.88rem; font-style:normal; font-weight:600; }
+.nlinks { display:flex; align-items:center; gap:2.3rem; list-style:none; }
+.nlinks a {
+  font-family:'Cinzel',serif; font-size:.65rem; letter-spacing:.17em;
+  color:var(--cdim); text-transform:uppercase;
+  position:relative; transition:color .3s; padding-bottom:3px;
+}
+.nlinks a::after {
+  content:''; position:absolute; bottom:-4px; left:0;
+  width:0; height:1px; background:var(--acc);
+  transition:width .4s cubic-bezier(.25,.46,.45,.94);
+}
+.nlinks a:hover, .nlinks a.act { color:var(--acc); }
+.nlinks a:hover::after, .nlinks a.act::after { width:100%; }
+.ncta {
+  font-family:'Cinzel',serif; font-size:.6rem; letter-spacing:.2em;
+  text-transform:uppercase; color:var(--acc); border:1px solid var(--acc);
+  padding:9px 22px; position:relative; overflow:hidden; transition:color .4s;
+}
+.ncta::before {
+  content:''; position:absolute; inset:0; background:var(--acc);
+  transform:translateX(-101%); transition:transform .4s cubic-bezier(.25,.46,.45,.94);
+}
+.ncta:hover { color:var(--black); }
+.ncta:hover::before { transform:translateX(0); }
+.ncta span { position:relative; z-index:1; }
+.hbg { display:none; flex-direction:column; gap:5px; cursor:pointer; padding:4px; }
+.hbg span { display:block; width:26px; height:1.5px; background:var(--acc); transition:all .4s; }
+.hbg.on span:nth-child(1){ transform:translateY(6.5px) rotate(45deg); }
+.hbg.on span:nth-child(2){ opacity:0; transform:scaleX(0); }
+.hbg.on span:nth-child(3){ transform:translateY(-6.5px) rotate(-45deg); }
+.mnav {
+  position:fixed; inset:0; background:rgba(8,8,8,.98);
+  backdrop-filter:blur(24px); z-index:999;
+  display:flex; align-items:center; justify-content:center;
+  flex-direction:column; gap:1.8rem;
+  opacity:0; visibility:hidden; transition:all .5s ease;
+}
+.mnav.on { opacity:1; visibility:visible; }
+.mnav a {
+  font-family:'Cormorant Garamond',serif; font-size:2.1rem;
+  font-style:italic; color:var(--cream);
+  opacity:0; transform:translateY(20px);
+  transition:all .4s ease, color .3s;
+}
+.mnav.on a { opacity:1; transform:translateY(0); }
+.mnav.on a:nth-child(1){transition-delay:.07s}
+.mnav.on a:nth-child(2){transition-delay:.12s}
+.mnav.on a:nth-child(3){transition-delay:.17s}
+.mnav.on a:nth-child(4){transition-delay:.22s}
+.mnav.on a:nth-child(5){transition-delay:.27s}
+.mnav.on a:nth-child(6){transition-delay:.32s}
+.mnav.on a:nth-child(7){transition-delay:.37s}
+.mnav a:hover { color:var(--acc); }
+
+/* ── PAGE HERO — FULL BG IMAGE ── */
+#mhero {
+  position:relative; height:55vh; min-height:440px;
+  display:flex; align-items:flex-end; overflow:hidden;
+}
+.mhero-bg {
+  position:absolute; inset:0;
+  background:
+    linear-gradient(to top, var(--black) 0%, rgba(8,8,8,.3) 60%, rgba(8,8,8,.5) 100%),
+    url('https://images.unsplash.com/photo-1543353071-873f17a7a088?w=1600&q=85') center/cover no-repeat;
+  transform:scale(1.04);
+  animation:heroZoom 8s ease forwards;
+}
+@keyframes heroZoom { to { transform:scale(1); } }
+
+.mhero-content {
+  position:relative; z-index:2;
+  padding:0 6% 5rem;
+  max-width:700px;
+}
+.mhero-label {
+  font-family:'Cinzel',serif; font-size:.58rem; letter-spacing:.4em;
+  color:var(--acc); text-transform:uppercase;
+  display:flex; align-items:center; gap:14px;
+  margin-bottom:1.4rem;
+  opacity:0; animation:fadeUp .8s ease .3s forwards;
+}
+.mhero-label::before { content:''; width:34px; height:1px; background:var(--acc); }
+.mhero-title {
+  font-family:'Cormorant Garamond',serif;
+  font-size:clamp(3rem,7vw,6rem);
+  font-weight:300; line-height:1;
+  color:var(--cream);
+  opacity:0; animation:fadeUp .9s ease .5s forwards;
+}
+.mhero-title em { color:var(--acc); font-style:italic; }
+.mhero-sub {
+  font-size:.9rem; color:var(--cdim); margin-top:1rem;
+  opacity:0; animation:fadeUp .8s ease .7s forwards;
+}
+@keyframes fadeUp { to { opacity:1; transform:translateY(0); } }
+
+/* ── SEARCH BAR ── */
+#search-wrap {
+  background:var(--dark2);
+  border-bottom:1px solid var(--border);
+  padding:20px 6%;
+  position:sticky; top:62px; z-index:100;
+  backdrop-filter:blur(20px);
+}
+.search-inner {
+  max-width:1300px; margin:0 auto;
+  display:flex; align-items:center; gap:1rem;
+}
+.search-box {
+  flex:1; position:relative;
+}
+.search-box i {
+  position:absolute; left:16px; top:50%;
+  transform:translateY(-50%);
+  color:var(--muted); font-size:.85rem;
+  pointer-events:none;
+}
+#search-input {
+  width:100%; background:var(--dark3);
+  border:1px solid var(--border);
+  color:var(--cream); padding:13px 16px 13px 44px;
+  font-family:'DM Sans',sans-serif; font-size:.88rem;
+  outline:none; transition:border-color .3s;
+}
+#search-input::placeholder { color:var(--muted); }
+#search-input:focus { border-color:var(--acc); }
+
+/* Result count */
+#result-count {
+  font-family:'Cinzel',serif; font-size:.58rem;
+  letter-spacing:.2em; color:var(--muted);
+  text-transform:uppercase; white-space:nowrap;
+}
+
+/* ── MAIN LAYOUT ── */
+#menu-body {
+  max-width:1400px; margin:0 auto;
+  display:grid;
+  grid-template-columns:260px 1fr;
+  gap:0; min-height:70vh;
+}
+
+/* ── SIDEBAR FILTERS ── */
+#sidebar {
+  padding:40px 30px;
+  border-right:1px solid var(--border);
+  position:sticky; top:120px;
+  height:fit-content;
+}
+.filter-heading {
+  font-family:'Cinzel',serif; font-size:.58rem;
+  letter-spacing:.3em; color:var(--acc);
+  text-transform:uppercase; margin-bottom:1.4rem;
+}
+.filter-group { margin-bottom:2.5rem; }
+.filter-group-title {
+  font-family:'Cinzel',serif; font-size:.55rem;
+  letter-spacing:.25em; color:var(--muted);
+  text-transform:uppercase; margin-bottom:1rem;
+  padding-bottom:.6rem; border-bottom:1px solid var(--border);
+}
+.filter-btn {
+  display:flex; align-items:center; justify-content:space-between;
+  width:100%; background:none; border:none;
+  font-family:'DM Sans',sans-serif; font-size:.82rem;
+  color:var(--cdim); padding:9px 12px;
+  cursor:pointer; text-align:left;
+  border-radius:4px; transition:all .3s;
+  margin-bottom:3px;
+}
+.filter-btn:hover { color:var(--cream); background:rgba(var(--acc-rgb),.05); }
+.filter-btn.on {
+  color:var(--acc); background:rgba(var(--acc-rgb),.1);
+  font-weight:400;
+}
+.filter-btn .count {
+  font-family:'Cinzel',serif; font-size:.55rem;
+  color:var(--muted); background:var(--dark3);
+  padding:2px 8px; border-radius:10px;
+  transition:background .3s, color .3s;
+}
+.filter-btn.on .count { background:rgba(var(--acc-rgb),.2); color:var(--acc); }
+
+/* Price range */
+.price-range { padding:0 4px; }
+#price-slider {
+  width:100%; margin:12px 0 6px;
+  accent-color:var(--acc); cursor:pointer;
+}
+.price-labels {
+  display:flex; justify-content:space-between;
+  font-family:'Cinzel',serif; font-size:.55rem;
+  color:var(--muted); letter-spacing:.1em;
+}
+
+/* Clear filters */
+#clear-filters {
+  width:100%; padding:10px;
+  background:none; border:1px solid var(--border);
+  color:var(--muted); font-family:'Cinzel',serif;
+  font-size:.55rem; letter-spacing:.2em;
+  text-transform:uppercase; cursor:pointer;
+  transition:all .3s; margin-top:1rem;
+}
+#clear-filters:hover { border-color:var(--acc); color:var(--acc); }
+
+/* ── MENU GRID AREA ── */
+#menu-area {
+  padding:40px 40px 80px;
+}
+
+/* Category heading inside grid */
+.cat-heading {
+  font-family:'Cormorant Garamond',serif;
+  font-size:2.2rem; font-style:italic;
+  color:var(--cream); margin-bottom:1.5rem; margin-top:1rem;
+  display:flex; align-items:center; gap:1rem;
+}
+.cat-heading::after {
+  content:''; flex:1; height:1px; background:var(--border);
+}
+.cat-heading em { color:var(--acc); }
+
+/* Cards grid */
+.cards-grid {
+  display:grid;
+  grid-template-columns:repeat(auto-fill, minmax(280px, 1fr));
+  gap:2px;
+  margin-bottom:3rem;
+}
+
+/* ── MENU CARD ── */
+.mcard {
+  position:relative;
+  background:var(--dark2);
+  overflow:hidden;
+  cursor:pointer;
+  transition:transform .4s cubic-bezier(.25,.46,.45,.94);
+}
+.mcard:hover { transform:translateY(-4px); }
+
+/* Card image */
+.mcard-img {
+  position:relative; height:200px; overflow:hidden;
+}
+.mcard-img img {
+  width:100%; height:100%; object-fit:cover;
+  transition:transform .7s cubic-bezier(.25,.46,.45,.94), filter .4s;
+  filter:brightness(.85);
+}
+.mcard:hover .mcard-img img { transform:scale(1.07); filter:brightness(1); }
+
+/* Badges on image */
+.mcard-badge {
+  position:absolute; top:14px; right:14px;
+  font-family:'Cinzel',serif; font-size:.48rem;
+  letter-spacing:.15em; text-transform:uppercase;
+  padding:4px 10px; z-index:2;
+}
+.badge-chef  { background:var(--acc); color:var(--black); }
+.badge-new   { background:#2a6b4f; color:var(--cream); }
+.badge-season{ background:rgba(8,8,8,.8); color:var(--acc); border:1px solid var(--acc); }
+
+/* Veg mark */
+.mcard-veg {
+  position:absolute; top:14px; left:14px;
+  width:22px; height:22px;
+  border:1.5px solid var(--gdot);
+  background:rgba(8,8,8,.7);
+  display:flex; align-items:center; justify-content:center;
+  z-index:2;
+}
+.mcard-veg::after {
+  content:''; width:10px; height:10px;
+  border-radius:50%; background:var(--gdot); display:block;
+}
+
+/* Price on image */
+.mcard-price-tag {
+  position:absolute; bottom:0; right:0;
+  background:rgba(8,8,8,.9); border-top:1px solid var(--border);
+  border-left:1px solid var(--border);
+  padding:6px 14px;
+  font-family:'Cinzel',serif; font-size:.82rem;
+  color:var(--acc); z-index:2;
+}
+
+/* Card body */
+.mcard-body { padding:18px 20px 22px; }
+.mcard-cat {
+  font-family:'Cinzel',serif; font-size:.5rem;
+  letter-spacing:.3em; color:var(--acc);
+  text-transform:uppercase; margin-bottom:.4rem;
+}
+.mcard-name {
+  font-family:'Cormorant Garamond',serif;
+  font-size:1.3rem; font-style:italic;
+  color:var(--cream); line-height:1.2;
+  margin-bottom:.5rem;
+}
+.mcard-desc {
+  font-size:.76rem; color:var(--muted);
+  line-height:1.7; margin-bottom:.8rem;
+}
+.mcard-tags { display:flex; gap:6px; flex-wrap:wrap; }
+.mcard-tag {
+  font-family:'Cinzel',serif; font-size:.46rem;
+  letter-spacing:.12em; text-transform:uppercase;
+  color:var(--muted); border:1px solid var(--border);
+  padding:3px 8px; border-radius:2px;
+  transition:all .3s;
+}
+.mcard:hover .mcard-tag { border-color:rgba(var(--acc-rgb),.3); color:var(--cdim); }
+
+/* Card hover reveal line */
+.mcard::before {
+  content:''; position:absolute;
+  bottom:0; left:0; right:0; height:2px;
+  background:var(--acc);
+  transform:scaleX(0); transform-origin:left;
+  transition:transform .4s ease;
+  z-index:3;
+}
+.mcard:hover::before { transform:scaleX(1); }
+
+/* ── CHEF'S SPECIAL FEATURED CARD ── */
+.mcard.featured {
+  grid-column:span 2;
+  display:grid;
+  grid-template-columns:1fr 1fr;
+}
+.mcard.featured .mcard-img { height:100%; min-height:220px; }
+.mcard.featured .mcard-body {
+  padding:32px 32px;
+  display:flex; flex-direction:column; justify-content:center;
+  background:linear-gradient(135deg, var(--dark2) 0%, rgba(var(--acc-rgb),.04) 100%);
+}
+.mcard.featured .mcard-name { font-size:1.8rem; }
+.featured-label {
+  font-family:'Great Vibes',cursive;
+  font-size:1.4rem; color:var(--acc);
+  margin-bottom:.6rem; display:block;
+}
+
+/* ── NO RESULTS ── */
+#no-results {
+  display:none;
+  text-align:center; padding:80px 20px;
+  grid-column:1/-1;
+}
+#no-results i { font-size:3rem; color:var(--muted); margin-bottom:1rem; display:block; }
+#no-results h3 {
+  font-family:'Cormorant Garamond',serif;
+  font-size:1.8rem; font-style:italic; color:var(--cdim);
+  margin-bottom:.5rem;
+}
+#no-results p { font-size:.85rem; color:var(--muted); }
+
+/* ── REVEAL ANIMATION ── */
+.rev {
+  opacity:0; transform:translateY(30px);
+  transition:opacity .8s ease, transform .8s ease;
+}
+.rev.vis { opacity:1; transform:none; }
+.d1{transition-delay:.05s} .d2{transition-delay:.1s}
+.d3{transition-delay:.15s} .d4{transition-delay:.2s}
+.d5{transition-delay:.25s}
+
+/* ── FOOTER ── */
+footer {
+  background:var(--dark2);
+  border-top:1px solid var(--border);
+}
+.foot-inner {
+  max-width:1300px; margin:0 auto;
+  padding:60px 6% 24px;
+  display:grid; grid-template-columns:1.5fr 1fr 1fr 1fr;
+  gap:4%;
+}
+.flogo {
+  font-family:'Cormorant Garamond',serif;
+  font-size:2rem; font-style:italic; color:var(--acc);
+  display:block; margin-bottom:1rem;
+}
+.flogo sup { font-size:.85rem; font-style:normal; font-weight:600; }
+.foot-inner p { font-size:.82rem; color:var(--muted); line-height:1.85; margin-bottom:1.6rem; }
+.socials { display:flex; gap:.8rem; }
+.soc {
+  width:35px; height:35px; border:1px solid var(--border);
+  display:flex; align-items:center; justify-content:center;
+  color:var(--muted); font-size:.78rem; transition:all .3s;
+}
+.soc:hover { border-color:var(--acc); color:var(--acc); }
+.fcol h4 {
+  font-family:'Cinzel',serif; font-size:.56rem;
+  letter-spacing:.3em; color:var(--acc);
+  text-transform:uppercase; margin-bottom:1.3rem;
+}
+.fcol a, .fcol span {
+  display:block; font-size:.82rem; color:var(--muted);
+  margin-bottom:.65rem; transition:color .3s, padding-left .3s;
+}
+.fcol a:hover { color:var(--acc); padding-left:4px; }
+.foot-bar {
+  border-top:1px solid var(--border);
+  padding:20px 6%;
+  display:flex; align-items:center; justify-content:space-between;
+  flex-wrap:wrap; gap:1rem;
+}
+.foot-bar p { font-size:.7rem; color:var(--muted); }
+.foot-bar .heart { color:var(--acc); }
+
+/* ── SCROLL TOP ── */
+#stb {
+  position:fixed; bottom:2.2rem; right:2.2rem;
+  width:42px; height:42px;
+  background:var(--dark2); border:1px solid var(--border);
+  color:var(--acc); display:flex; align-items:center; justify-content:center;
+  cursor:pointer; z-index:100;
+  opacity:0; visibility:hidden; transform:translateY(10px);
+  transition:all .4s ease;
+}
+#stb.show { opacity:1; visibility:visible; transform:translateY(0); }
+#stb:hover { background:var(--acc); color:var(--black); }
+
+/* ── RESPONSIVE ── */
+@media (max-width:1100px) {
+  #menu-body { grid-template-columns:220px 1fr; }
+  .mcard.featured { grid-column:span 1; grid-template-columns:1fr; }
+  .mcard.featured .mcard-img { height:200px; }
+}
+@media (max-width:900px) {
+  #menu-body { grid-template-columns:1fr; }
+  #sidebar { position:relative; top:0; border-right:none; border-bottom:1px solid var(--border); padding:24px 5%; }
+  .filter-group { display:inline-flex; flex-direction:column; margin-right:2rem; margin-bottom:0; vertical-align:top; }
+  #sidebar > div:last-child { display:none; }
+  #menu-area { padding:30px 5% 60px; }
+  .mcard.featured { grid-template-columns:1fr; }
+  .foot-inner { grid-template-columns:1fr 1fr; gap:2.5rem; }
+  .nlinks, .ncta { display:none; }
+  .hbg { display:flex; }
+}
+@media (max-width:600px) {
+  .cards-grid { grid-template-columns:1fr; }
+  .mcard.featured { grid-column:span 1; }
+  .foot-inner { grid-template-columns:1fr; }
+  #search-wrap { top:60px; }
+}
+  </style>
+</head>
+<body>
+
+<!-- Cursor -->
+<div id="cd"></div>
+<div id="cr"></div>
+
+<!-- Progress -->
+<div id="prog"></div>
+
+<!-- Theme Panel -->
+<div id="tbtn" title="Theme"><i class="fa-solid fa-palette"></i></div>
+<div id="tpanel">
+  <h6>Theme</h6>
+  <div class="swatches">
+    <div class="sw on"  data-t="gold">     <div class="sw-c" style="background:#C9A84C"></div><span class="sw-n">Gold</span></div>
+    <div class="sw"     data-t="emerald">  <div class="sw-c" style="background:#4CAF82"></div><span class="sw-n">Emerald</span></div>
+    <div class="sw"     data-t="rose">     <div class="sw-c" style="background:#C97878"></div><span class="sw-n">Rose</span></div>
+    <div class="sw"     data-t="ivory">    <div class="sw-c" style="background:#D4C5A9"></div><span class="sw-n">Ivory</span></div>
+    <div class="sw"     data-t="sapphire"> <div class="sw-c" style="background:#6A9BC9"></div><span class="sw-n">Sapphire</span></div>
+  </div>
+</div>
+
+<!-- Navbar -->
+<nav id="nav">
+  <a href="index.html" class="logo">N<sup>²</sup></a>
+  <ul class="nlinks">
+    <li><a href="index.html">Home</a></li>
+    <li><a href="menu.html" class="act">Menu</a></li>
+    <li><a href="about.html">Our Story</a></li>
+    <li><a href="gallery.html">Gallery</a></li>
+    <li><a href="events.html">Events</a></li>
+    <li><a href="contact.html">Contact</a></li>
+  </ul>
+  <a href="reservations.html" class="ncta"><span>Reserve a Table</span></a>
+  <div class="hbg" id="hbg"><span></span><span></span><span></span></div>
+</nav>
+
+<!-- Mobile Nav -->
+<div class="mnav" id="mnav">
+  <a href="index.html">Home</a>
+  <a href="menu.html">Menu</a>
+  <a href="about.html">Our Story</a>
+  <a href="gallery.html">Gallery</a>
+  <a href="events.html">Events</a>
+  <a href="contact.html">Contact</a>
+  <a href="reservations.html">Reserve a Table</a>
+</div>
+
+<!-- ══ HERO ══ -->
+<section id="mhero">
+  <div class="mhero-bg"></div>
+  <div class="mhero-content">
+    <div class="mhero-label">Our Menu</div>
+    <h1 class="mhero-title">A Symphony of<br><em>Pure Flavours</em></h1>
+    <p class="mhero-sub">Crafted fresh daily · 100% vegetarian · Seasonal ingredients</p>
+  </div>
+</section>
+
+<!-- ══ SEARCH BAR ══ -->
+<div id="search-wrap">
+  <div class="search-inner">
+    <div class="search-box">
+      <i class="fa-solid fa-magnifying-glass"></i>
+      <input type="text" id="search-input" placeholder="Search dishes — e.g. risotto, paneer, chocolate..."/>
+    </div>
+    <span id="result-count">All dishes</span>
+  </div>
+</div>
+
+<!-- ══ MENU BODY ══ -->
+<div id="menu-body">
+
+  <!-- Sidebar Filters -->
+  <aside id="sidebar">
+
+    <div class="filter-group">
+      <div class="filter-heading">Category</div>
+      <button class="filter-btn on" data-filter="all">
+        All Dishes <span class="count" id="cnt-all">20</span>
+      </button>
+      <button class="filter-btn" data-filter="starter">
+        Starters <span class="count" id="cnt-starter">5</span>
+      </button>
+      <button class="filter-btn" data-filter="main">
+        Mains <span class="count" id="cnt-main">5</span>
+      </button>
+      <button class="filter-btn" data-filter="bread">
+        Breads <span class="count" id="cnt-bread">4</span>
+      </button>
+      <button class="filter-btn" data-filter="dessert">
+        Desserts <span class="count" id="cnt-dessert">4</span>
+      </button>
+      <button class="filter-btn" data-filter="drink">
+        Drinks <span class="count" id="cnt-drink">4</span>
+      </button>
+    </div>
+
+    <div class="filter-group">
+      <div class="filter-group-title">Special</div>
+      <button class="filter-btn" data-filter="chef">
+        Chef's Special <span class="count">4</span>
+      </button>
+      <button class="filter-btn" data-filter="seasonal">
+        Seasonal <span class="count">3</span>
+      </button>
+      <button class="filter-btn" data-filter="new">
+        New Additions <span class="count">3</span>
+      </button>
+    </div>
+
+    <div class="filter-group">
+      <div class="filter-group-title">Price Range</div>
+      <div class="price-range">
+        <input type="range" id="price-slider" min="100" max="800" value="800" step="50"/>
+        <div class="price-labels">
+          <span>₹100</span>
+          <span id="price-val">Up to ₹800</span>
+        </div>
+      </div>
+    </div>
+
+    <button id="clear-filters">
+      <i class="fa-solid fa-rotate-left" style="margin-right:6px;font-size:.7rem;"></i>
+      Clear All Filters
+    </button>
+
+  </aside>
+
+  <!-- Menu Cards Area -->
+  <main id="menu-area">
+
+    <!-- ── STARTERS ── -->
+    <h2 class="cat-heading rev" data-cat="starter">Starters <em>&</em> Salads</h2>
+    <div class="cards-grid" id="grid-starter">
+
+      <!-- Chef's Special Featured Card -->
+      <div class="mcard featured rev d1" data-cat="starter" data-tags="chef" data-price="420">
+        <div class="mcard-img">
+          <img src="https://images.unsplash.com/photo-1512621776951-a57141f2eefd?w=800&q=80" alt="Garden Harvest Platter"/>
+          <div class="mcard-veg"></div>
+          <div class="mcard-badge badge-chef">Chef's Special</div>
+          <div class="mcard-price-tag">₹ 420</div>
+        </div>
+        <div class="mcard-body">
+          <span class="featured-label">Tonight's Signature</span>
+          <div class="mcard-cat">Starter</div>
+          <div class="mcard-name">Garden Harvest Platter</div>
+          <div class="mcard-desc">A celebration of the season — heirloom vegetables arranged artfully with cashew hummus, edible flowers, cold-pressed seed oils, and house-pickled vegetables. A feast for the eyes before it graces the palate.</div>
+          <div class="mcard-tags">
+            <span class="mcard-tag">Gluten Free</span>
+            <span class="mcard-tag">Raw</span>
+            <span class="mcard-tag">Seasonal</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="mcard rev d2" data-cat="starter" data-tags="" data-price="280">
+        <div class="mcard-img">
+          <img src="https://images.unsplash.com/photo-1572453800999-e8d2d1589b7c?w=600&q=80" alt="Heirloom Tomato Bruschetta"/>
+          <div class="mcard-veg"></div>
+          <div class="mcard-price-tag">₹ 280</div>
+        </div>
+        <div class="mcard-body">
+          <div class="mcard-cat">Starter</div>
+          <div class="mcard-name">Heirloom Tomato Bruschetta</div>
+          <div class="mcard-desc">Slow-roasted tomato, whipped ricotta, micro basil, aged balsamic on sourdough crouton.</div>
+          <div class="mcard-tags"><span class="mcard-tag">Dairy</span><span class="mcard-tag">Baked</span></div>
+        </div>
+      </div>
+
+      <div class="mcard rev d3" data-cat="starter" data-tags="new" data-price="340">
+        <div class="mcard-img">
+          <img src="https://images.unsplash.com/photo-1555939594-58d7cb561ad1?w=600&q=80" alt="Wild Mushroom Crostini"/>
+          <div class="mcard-veg"></div>
+          <div class="mcard-badge badge-new">New</div>
+          <div class="mcard-price-tag">₹ 340</div>
+        </div>
+        <div class="mcard-body">
+          <div class="mcard-cat">Starter</div>
+          <div class="mcard-name">Wild Mushroom Crostini</div>
+          <div class="mcard-desc">Pan-seared porcini, truffle cream, toasted sourdough, pea shoots, microgreens.</div>
+          <div class="mcard-tags"><span class="mcard-tag">Truffle</span><span class="mcard-tag">New</span></div>
+        </div>
+      </div>
+
+      <div class="mcard rev d4" data-cat="starter" data-tags="" data-price="310">
+        <div class="mcard-img">
+          <img src="https://images.unsplash.com/photo-1544025162-d76694265947?w=600&q=80" alt="Beetroot Carpaccio"/>
+          <div class="mcard-veg"></div>
+          <div class="mcard-price-tag">₹ 310</div>
+        </div>
+        <div class="mcard-body">
+          <div class="mcard-cat">Starter</div>
+          <div class="mcard-name">Beetroot Carpaccio</div>
+          <div class="mcard-desc">Thinly sliced roasted beets, walnut praline, goat cheese, fresh herb oil, pomegranate.</div>
+          <div class="mcard-tags"><span class="mcard-tag">Gluten Free</span><span class="mcard-tag">Raw</span></div>
+        </div>
+      </div>
+
+      <div class="mcard rev d2" data-cat="starter" data-tags="chef seasonal" data-price="360">
+        <div class="mcard-img">
+          <img src="https://images.unsplash.com/photo-1547592180-85f173990554?w=600&q=80" alt="Corn Chowder"/>
+          <div class="mcard-veg"></div>
+          <div class="mcard-badge badge-season">Seasonal</div>
+          <div class="mcard-price-tag">₹ 360</div>
+        </div>
+        <div class="mcard-body">
+          <div class="mcard-cat">Starter · Soup</div>
+          <div class="mcard-name">Sweet Corn Velouté</div>
+          <div class="mcard-desc">Roasted sweet corn bisque, truffle foam, chive oil, crispy corn skin garnish.</div>
+          <div class="mcard-tags"><span class="mcard-tag">Seasonal</span><span class="mcard-tag">Warm</span></div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- ── MAINS ── -->
+    <h2 class="cat-heading rev" data-cat="main">Main <em>Course</em></h2>
+    <div class="cards-grid" id="grid-main">
+
+      <div class="mcard featured rev d1" data-cat="main" data-tags="chef" data-price="680">
+        <div class="mcard-img">
+          <img src="https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=800&q=80" alt="Saffron Risotto"/>
+          <div class="mcard-veg"></div>
+          <div class="mcard-badge badge-chef">Chef's Special</div>
+          <div class="mcard-price-tag">₹ 680</div>
+        </div>
+        <div class="mcard-body">
+          <span class="featured-label">House Signature</span>
+          <div class="mcard-cat">Main Course</div>
+          <div class="mcard-name">Saffron Garden Risotto</div>
+          <div class="mcard-desc">Aged arborio rice slow-cooked in saffron broth, topped with foraged mushrooms, truffle oil, a parmesan crisp, and a delicate herb emulsion. The heart of our kitchen — a dish that defines N².</div>
+          <div class="mcard-tags">
+            <span class="mcard-tag">Truffle</span>
+            <span class="mcard-tag">Saffron</span>
+            <span class="mcard-tag">Dairy</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="mcard rev d2" data-cat="main" data-tags="chef" data-price="590">
+        <div class="mcard-img">
+          <img src="https://images.unsplash.com/photo-1585937421612-70a008356fbe?w=600&q=80" alt="Paneer Tikka Royale"/>
+          <div class="mcard-veg"></div>
+          <div class="mcard-badge badge-chef">Chef's Special</div>
+          <div class="mcard-price-tag">₹ 590</div>
+        </div>
+        <div class="mcard-body">
+          <div class="mcard-cat">Main Course · Indian</div>
+          <div class="mcard-name">Paneer Tikka Royale</div>
+          <div class="mcard-desc">Smoke-kissed paneer, makhani reduction, charred corn, saffron rice, micro herb garnish.</div>
+          <div class="mcard-tags"><span class="mcard-tag">Spiced</span><span class="mcard-tag">Smoked</span></div>
+        </div>
+      </div>
+
+      <div class="mcard rev d3" data-cat="main" data-tags="" data-price="480">
+        <div class="mcard-img">
+          <img src="https://images.unsplash.com/photo-1546833999-b9f581a1996d?w=600&q=80" alt="Dal Makhani"/>
+          <div class="mcard-veg"></div>
+          <div class="mcard-price-tag">₹ 480</div>
+        </div>
+        <div class="mcard-body">
+          <div class="mcard-cat">Main Course · Indian</div>
+          <div class="mcard-name">Dal Makhani N²</div>
+          <div class="mcard-desc">48-hour slow-cooked black lentils, house spice blend, butter cream, charcoal finish.</div>
+          <div class="mcard-tags"><span class="mcard-tag">Slow Cooked</span><span class="mcard-tag">Butter</span></div>
+        </div>
+      </div>
+
+      <div class="mcard rev d4" data-cat="main" data-tags="new" data-price="720">
+        <div class="mcard-img">
+          <img src="https://images.unsplash.com/photo-1476224203421-9ac39bcb3327?w=600&q=80" alt="Truffle Pasta"/>
+          <div class="mcard-veg"></div>
+          <div class="mcard-badge badge-new">New</div>
+          <div class="mcard-price-tag">₹ 720</div>
+        </div>
+        <div class="mcard-body">
+          <div class="mcard-cat">Main Course · Italian</div>
+          <div class="mcard-name">Truffle Pasta Bianco</div>
+          <div class="mcard-desc">Hand-rolled tagliatelle, white truffle, aged pecorino, chives, cream reduction.</div>
+          <div class="mcard-tags"><span class="mcard-tag">Truffle</span><span class="mcard-tag">Handmade</span></div>
+        </div>
+      </div>
+
+      <div class="mcard rev d2" data-cat="main" data-tags="seasonal" data-price="520">
+        <div class="mcard-img">
+          <img src="https://images.unsplash.com/photo-1574484284002-952d92456975?w=600&q=80" alt="Mushroom Wellington"/>
+          <div class="mcard-veg"></div>
+          <div class="mcard-badge badge-season">Seasonal</div>
+          <div class="mcard-price-tag">₹ 520</div>
+        </div>
+        <div class="mcard-body">
+          <div class="mcard-cat">Main Course · Continental</div>
+          <div class="mcard-name">Mushroom Wellington</div>
+          <div class="mcard-desc">Wild mushroom duxelles wrapped in golden puff pastry, red wine jus, seasonal greens.</div>
+          <div class="mcard-tags"><span class="mcard-tag">Baked</span><span class="mcard-tag">Seasonal</span></div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- ── BREADS ── -->
+    <h2 class="cat-heading rev" data-cat="bread">Artisan <em>Breads</em></h2>
+    <div class="cards-grid" id="grid-bread">
+
+      <div class="mcard rev d1" data-cat="bread" data-tags="chef" data-price="180">
+        <div class="mcard-img">
+          <img src="https://images.unsplash.com/photo-1509440159596-0249088772ff?w=600&q=80" alt="Truffle Naan"/>
+          <div class="mcard-veg"></div>
+          <div class="mcard-badge badge-chef">Chef's Pick</div>
+          <div class="mcard-price-tag">₹ 180</div>
+        </div>
+        <div class="mcard-body">
+          <div class="mcard-cat">Bread</div>
+          <div class="mcard-name">Truffle Naan</div>
+          <div class="mcard-desc">Hand-stretched dough, black truffle butter, fresh dill and chive finish.</div>
+          <div class="mcard-tags"><span class="mcard-tag">Truffle</span><span class="mcard-tag">Tandoor</span></div>
+        </div>
+      </div>
+
+      <div class="mcard rev d2" data-cat="bread" data-tags="" data-price="160">
+        <div class="mcard-img">
+          <img src="https://images.unsplash.com/photo-1486887396153-fa416526c108?w=600&q=80" alt="Stuffed Kulcha"/>
+          <div class="mcard-veg"></div>
+          <div class="mcard-price-tag">₹ 160</div>
+        </div>
+        <div class="mcard-body">
+          <div class="mcard-cat">Bread · Indian</div>
+          <div class="mcard-name">Stuffed Kulcha</div>
+          <div class="mcard-desc">Whole wheat flatbread, potato-paneer filling, caramelised onion, served with mint chutney.</div>
+          <div class="mcard-tags"><span class="mcard-tag">Stuffed</span><span class="mcard-tag">Tandoor</span></div>
+        </div>
+      </div>
+
+      <div class="mcard rev d3" data-cat="bread" data-tags="" data-price="140">
+        <div class="mcard-img">
+          <img src="https://images.unsplash.com/photo-1565299507177-b0ac66763828?w=600&q=80" alt="Laccha Paratha"/>
+          <div class="mcard-veg"></div>
+          <div class="mcard-price-tag">₹ 140</div>
+        </div>
+        <div class="mcard-body">
+          <div class="mcard-cat">Bread · Indian</div>
+          <div class="mcard-name">Garlic Laccha Paratha</div>
+          <div class="mcard-desc">Multi-layered flatbread, roasted garlic, clarified butter, sesame seeds.</div>
+          <div class="mcard-tags"><span class="mcard-tag">Layered</span><span class="mcard-tag">Garlic</span></div>
+        </div>
+      </div>
+
+      <div class="mcard rev d4" data-cat="bread" data-tags="new" data-price="220">
+        <div class="mcard-img">
+          <img src="https://images.unsplash.com/photo-1549931319-a545dcf3bc7c?w=600&q=80" alt="Sourdough Loaf"/>
+          <div class="mcard-veg"></div>
+          <div class="mcard-badge badge-new">New</div>
+          <div class="mcard-price-tag">₹ 220</div>
+        </div>
+        <div class="mcard-body">
+          <div class="mcard-cat">Bread · Artisan</div>
+          <div class="mcard-name">Sourdough Loaf</div>
+          <div class="mcard-desc">24-hour fermented sourdough, herbed butter, Himalayan pink salt, olive oil dip.</div>
+          <div class="mcard-tags"><span class="mcard-tag">Artisan</span><span class="mcard-tag">Fermented</span></div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- ── DESSERTS ── -->
+    <h2 class="cat-heading rev" data-cat="dessert">Sweet <em>Endings</em></h2>
+    <div class="cards-grid" id="grid-dessert">
+
+      <div class="mcard featured rev d1" data-cat="dessert" data-tags="chef" data-price="380">
+        <div class="mcard-img">
+          <img src="https://images.unsplash.com/photo-1578985545062-69928b1d9587?w=800&q=80" alt="Dark Chocolate Sphere"/>
+          <div class="mcard-veg"></div>
+          <div class="mcard-badge badge-chef">Signature</div>
+          <div class="mcard-price-tag">₹ 380</div>
+        </div>
+        <div class="mcard-body">
+          <span class="featured-label">Dessert of the House</span>
+          <div class="mcard-cat">Dessert · Chocolate</div>
+          <div class="mcard-name">Dark Chocolate Sphere</div>
+          <div class="mcard-desc">A molten dark chocolate shell cracked at the table to reveal warm salted caramel ganache, pistachio soil, vanilla bean cream, and edible gold leaf. Theatre and taste in one unforgettable moment.</div>
+          <div class="mcard-tags">
+            <span class="mcard-tag">Chocolate</span>
+            <span class="mcard-tag">Molten</span>
+            <span class="mcard-tag">Gold Leaf</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="mcard rev d2" data-cat="dessert" data-tags="seasonal" data-price="320">
+        <div class="mcard-img">
+          <img src="https://images.unsplash.com/photo-1488477181228-c84def77f5f1?w=600&q=80" alt="Mango Panna Cotta"/>
+          <div class="mcard-veg"></div>
+          <div class="mcard-badge badge-season">Seasonal</div>
+          <div class="mcard-price-tag">₹ 320</div>
+        </div>
+        <div class="mcard-body">
+          <div class="mcard-cat">Dessert · Italian</div>
+          <div class="mcard-name">Mango Panna Cotta</div>
+          <div class="mcard-desc">Alphonso mango, cardamom cream, rose jelly, saffron threads, tuile garnish.</div>
+          <div class="mcard-tags"><span class="mcard-tag">Mango</span><span class="mcard-tag">Chilled</span></div>
+        </div>
+      </div>
+
+      <div class="mcard rev d3" data-cat="dessert" data-tags="" data-price="350">
+        <div class="mcard-img">
+          <img src="https://images.unsplash.com/photo-1551024601-bec78aea704b?w=600&q=80" alt="Gulab Jamun Souffle"/>
+          <div class="mcard-veg"></div>
+          <div class="mcard-price-tag">₹ 350</div>
+        </div>
+        <div class="mcard-body">
+          <div class="mcard-cat">Dessert · Indian Fusion</div>
+          <div class="mcard-name">Gulab Jamun Soufflé</div>
+          <div class="mcard-desc">Warm milk-solid soufflé, rose syrup centre, pistachio dust, cardamom whipped cream.</div>
+          <div class="mcard-tags"><span class="mcard-tag">Warm</span><span class="mcard-tag">Rose</span></div>
+        </div>
+      </div>
+
+      <div class="mcard rev d4" data-cat="dessert" data-tags="" data-price="260">
+        <div class="mcard-img">
+          <img src="https://images.unsplash.com/photo-1497034825429-c343d7c6a68f?w=600&q=80" alt="Saffron Kulfi"/>
+          <div class="mcard-veg"></div>
+          <div class="mcard-price-tag">₹ 260</div>
+        </div>
+        <div class="mcard-body">
+          <div class="mcard-cat">Dessert · Indian</div>
+          <div class="mcard-name">Saffron Kulfi</div>
+          <div class="mcard-desc">Housemade kulfi, roasted nuts, chilled falooda strands, rose syrup drizzle.</div>
+          <div class="mcard-tags"><span class="mcard-tag">Frozen</span><span class="mcard-tag">Saffron</span></div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- ── DRINKS ── -->
+    <h2 class="cat-heading rev" data-cat="drink">Crafted <em>Drinks</em></h2>
+    <div class="cards-grid" id="grid-drink">
+
+      <div class="mcard rev d1" data-cat="drink" data-tags="" data-price="180">
+        <div class="mcard-img">
+          <img src="https://images.unsplash.com/photo-1544145945-f90425340c7e?w=600&q=80" alt="Rose Lychee Cooler"/>
+          <div class="mcard-veg"></div>
+          <div class="mcard-price-tag">₹ 180</div>
+        </div>
+        <div class="mcard-body">
+          <div class="mcard-cat">Cold Drink · Mocktail</div>
+          <div class="mcard-name">Rose Lychee Cooler</div>
+          <div class="mcard-desc">Fresh lychee, rose water, basil seeds, mint, sparkling water, hibiscus garnish.</div>
+          <div class="mcard-tags"><span class="mcard-tag">Chilled</span><span class="mcard-tag">Floral</span></div>
+        </div>
+      </div>
+
+      <div class="mcard rev d2" data-cat="drink" data-tags="chef" data-price="160">
+        <div class="mcard-img">
+          <img src="https://images.unsplash.com/photo-1553361371-9b22f78e8b1d?w=600&q=80" alt="Mango Lassi Royale"/>
+          <div class="mcard-veg"></div>
+          <div class="mcard-badge badge-chef">Bestseller</div>
+          <div class="mcard-price-tag">₹ 160</div>
+        </div>
+        <div class="mcard-body">
+          <div class="mcard-cat">Cold Drink · Indian</div>
+          <div class="mcard-name">Mango Lassi Royale</div>
+          <div class="mcard-desc">Alphonso mango, hung curd, cardamom, topped with saffron foam and pistachio dust.</div>
+          <div class="mcard-tags"><span class="mcard-tag">Mango</span><span class="mcard-tag">Creamy</span></div>
+        </div>
+      </div>
+
+      <div class="mcard rev d3" data-cat="drink" data-tags="" data-price="220">
+        <div class="mcard-img">
+          <img src="https://images.unsplash.com/photo-1461023058943-07fcbe16d735?w=600&q=80" alt="Masala Cold Brew"/>
+          <div class="mcard-veg"></div>
+          <div class="mcard-price-tag">₹ 220</div>
+        </div>
+        <div class="mcard-body">
+          <div class="mcard-cat">Cold Drink · Coffee</div>
+          <div class="mcard-name">Masala Cold Brew</div>
+          <div class="mcard-desc">18-hour cold brew, house masala blend, coconut cream, cinnamon bark garnish.</div>
+          <div class="mcard-tags"><span class="mcard-tag">Coffee</span><span class="mcard-tag">Spiced</span></div>
+        </div>
+      </div>
+
+      <div class="mcard rev d4" data-cat="drink" data-tags="new" data-price="140">
+        <div class="mcard-img">
+          <img src="https://images.unsplash.com/photo-1556679343-c7306c1976bc?w=600&q=80" alt="Herbal Infusion"/>
+          <div class="mcard-veg"></div>
+          <div class="mcard-badge badge-new">New</div>
+          <div class="mcard-price-tag">₹ 140</div>
+        </div>
+        <div class="mcard-body">
+          <div class="mcard-cat">Hot Drink · Tea</div>
+          <div class="mcard-name">Herbal Infusion</div>
+          <div class="mcard-desc">Seasonal herbs, raw honey, lemon wheel, house tea blend, served in cast iron pot.</div>
+          <div class="mcard-tags"><span class="mcard-tag">Herbal</span><span class="mcard-tag">Hot</span></div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- No results message -->
+    <div id="no-results">
+      <i class="fa-solid fa-bowl-food"></i>
+      <h3>No dishes found</h3>
+      <p>Try a different search or clear your filters.</p>
+    </div>
+
+  </main>
+</div>
+
+
+<!-- ══ FOOTER ══ -->
+<footer>
+  <div class="foot-inner">
+    <div>
+      <a href="index.html" class="flogo">N<sup>²</sup></a>
+      <p>Where flavour meets precision. Pure vegetarian fine dining in Bareilly, UP.</p>
+      <div class="socials">
+        <a href="#" class="soc"><i class="fa-brands fa-instagram"></i></a>
+        <a href="#" class="soc"><i class="fa-brands fa-facebook-f"></i></a>
+        <a href="#" class="soc"><i class="fa-brands fa-x-twitter"></i></a>
+      </div>
+    </div>
+    <div class="fcol">
+      <h4>Navigate</h4>
+      <a href="index.html">Home</a>
+      <a href="menu.html">Menu</a>
+      <a href="about.html">Our Story</a>
+      <a href="gallery.html">Gallery</a>
+      <a href="events.html">Events</a>
+      <a href="contact.html">Contact</a>
+    </div>
+    <div class="fcol">
+      <h4>Dining</h4>
+      <a href="reservations.html">Reserve a Table</a>
+      <a href="events.html">Private Events</a>
+      <a href="#">Gift Vouchers</a>
+    </div>
+    <div class="fcol">
+      <h4>Find Us</h4>
+      <span>14, The Promenade</span>
+      <span>Civil Lines, Bareilly</span>
+      <span>+91 98765 43210</span>
+      <span>dine@nsquared.in</span>
+    </div>
+  </div>
+  <div class="foot-bar">
+    <p>© 2024 N² Restaurant · All rights reserved.</p>
+    <p>Crafted with <span class="heart">♥</span> & precision</p>
+  </div>
+</footer>
+
+<div id="stb"><i class="fa-solid fa-arrow-up"></i></div>
+
+
+<script>
+/* ── CURSOR ── */
+const cd = document.getElementById('cd');
+const cr = document.getElementById('cr');
+let mx=0,my=0,rx=0,ry=0;
+document.addEventListener('mousemove', e => { mx=e.clientX; my=e.clientY; });
+(function tick(){
+  cd.style.left=mx+'px'; cd.style.top=my+'px';
+  rx+=(mx-rx)*.12; ry+=(my-ry)*.12;
+  cr.style.left=rx+'px'; cr.style.top=ry+'px';
+  requestAnimationFrame(tick);
+})();
+document.querySelectorAll('a,button,.mcard,.sw,.filter-btn').forEach(el=>{
+  el.addEventListener('mouseenter',()=>cr.classList.add('hov'));
+  el.addEventListener('mouseleave',()=>cr.classList.remove('hov'));
+});
+document.addEventListener('mousedown',()=>cr.classList.add('clk'));
+document.addEventListener('mouseup',  ()=>cr.classList.remove('clk'));
+
+/* ── CLICK RIPPLE ── */
+document.addEventListener('click', e => {
+  const r = document.createElement('div');
+  r.className = 'rburst';
+  r.style.left = e.clientX+'px';
+  r.style.top  = e.clientY+'px';
+  document.body.appendChild(r);
+  setTimeout(()=>r.remove(), 700);
+});
+
+/* ── PROGRESS BAR ── */
+window.addEventListener('scroll', () => {
+  const pct = window.scrollY / (document.body.scrollHeight - innerHeight) * 100;
+  document.getElementById('prog').style.width = pct+'%';
+});
+
+/* ── NAVBAR ── */
+window.addEventListener('scroll', () => {
+  document.getElementById('nav').classList.toggle('sc', scrollY > 60);
+});
+
+/* ── HAMBURGER ── */
+const hbg  = document.getElementById('hbg');
+const mnav = document.getElementById('mnav');
+hbg.addEventListener('click', () => {
+  hbg.classList.toggle('on');
+  mnav.classList.toggle('on');
+  document.body.style.overflow = mnav.classList.contains('on') ? 'hidden' : '';
+});
+mnav.querySelectorAll('a').forEach(a => a.addEventListener('click', () => {
+  hbg.classList.remove('on');
+  mnav.classList.remove('on');
+  document.body.style.overflow = '';
+}));
+
+/* ── SCROLL REVEAL ── */
+const io = new IntersectionObserver(entries => entries.forEach(e => {
+  if(e.isIntersecting){ e.target.classList.add('vis'); io.unobserve(e.target); }
+}), { threshold:.1 });
+document.querySelectorAll('.rev').forEach(el => io.observe(el));
+
+/* ── SCROLL TOP ── */
+const stb = document.getElementById('stb');
+window.addEventListener('scroll', () => stb.classList.toggle('show', scrollY > 500));
+stb.addEventListener('click', () => window.scrollTo({ top:0, behavior:'smooth' }));
+
+/* ── THEME SWITCHER ── */
+const html  = document.documentElement;
+const tbtn  = document.getElementById('tbtn');
+const tp    = document.getElementById('tpanel');
+tbtn.addEventListener('click', e => { e.stopPropagation(); tp.classList.toggle('open'); });
+document.querySelectorAll('.sw').forEach(s => {
+  s.addEventListener('click', function(){
+    html.setAttribute('data-theme', this.dataset.t);
+    document.querySelectorAll('.sw').forEach(x => x.classList.remove('on'));
+    this.classList.add('on');
+    localStorage.setItem('n2theme', this.dataset.t);
+  });
+});
+document.addEventListener('click', e => { if(!tp.contains(e.target)&&e.target!==tbtn) tp.classList.remove('open'); });
+const saved = localStorage.getItem('n2theme');
+if(saved){
+  html.setAttribute('data-theme', saved);
+  document.querySelectorAll('.sw').forEach(s => s.classList.toggle('on', s.dataset.t===saved));
+}
+
+/* ── ALL MENU CARDS (for filter/search) ── */
+const allCards = document.querySelectorAll('.mcard');
+const catHeadings = document.querySelectorAll('.cat-heading');
+let activeFilter = 'all';
+let maxPrice = 800;
+let searchTerm = '';
+
+/* Update result count */
+function updateCount(){
+  let visible = [...allCards].filter(c => !c.style.display || c.style.display !== 'none').length;
+  const rc = document.getElementById('result-count');
+  rc.textContent = visible === allCards.length
+    ? 'All dishes'
+    : `${visible} dish${visible!==1?'es':''} found`;
+
+  /* Show/hide "no results" */
+  document.getElementById('no-results').style.display = visible === 0 ? 'block' : 'none';
+
+  /* Show/hide category headings */
+  catHeadings.forEach(h => {
+    const cat = h.dataset.cat;
+    const grid = document.getElementById('grid-'+cat);
+    if(!grid) return;
+    const hasVisible = [...grid.querySelectorAll('.mcard')]
+      .some(c => c.style.display !== 'none');
+    h.style.display = hasVisible ? '' : 'none';
+  });
+}
+
+/* Main filter function */
+function applyFilters(){
+  allCards.forEach(card => {
+    const cardCat   = card.dataset.cat   || '';
+    const cardTags  = card.dataset.tags  || '';
+    const cardPrice = parseInt(card.dataset.price) || 0;
+    const cardName  = card.querySelector('.mcard-name')?.textContent.toLowerCase() || '';
+    const cardDesc  = card.querySelector('.mcard-desc')?.textContent.toLowerCase() || '';
+
+    /* Category/tag match */
+    let catMatch = false;
+    if(activeFilter === 'all')       catMatch = true;
+    else if(activeFilter === 'chef') catMatch = cardTags.includes('chef');
+    else if(activeFilter === 'seasonal') catMatch = cardTags.includes('seasonal');
+    else if(activeFilter === 'new')  catMatch = cardTags.includes('new');
+    else                             catMatch = cardCat === activeFilter;
+
+    /* Price match */
+    const priceMatch = cardPrice <= maxPrice;
+
+    /* Search match */
+    const searchMatch = searchTerm === '' ||
+      cardName.includes(searchTerm) ||
+      cardDesc.includes(searchTerm) ||
+      cardCat.includes(searchTerm)  ||
+      cardTags.includes(searchTerm);
+
+    card.style.display = (catMatch && priceMatch && searchMatch) ? '' : 'none';
+  });
+
+  updateCount();
+}
+
+/* Filter buttons */
+document.querySelectorAll('.filter-btn').forEach(btn => {
+  btn.addEventListener('click', function(){
+    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('on'));
+    this.classList.add('on');
+    activeFilter = this.dataset.filter;
+    applyFilters();
+  });
+});
+
+/* Price slider */
+const slider   = document.getElementById('price-slider');
+const priceVal = document.getElementById('price-val');
+slider.addEventListener('input', function(){
+  maxPrice = parseInt(this.value);
+  priceVal.textContent = this.value == 800 ? 'All prices' : `Up to ₹${this.value}`;
+  applyFilters();
+});
+
+/* Search input */
+document.getElementById('search-input').addEventListener('input', function(){
+  searchTerm = this.value.toLowerCase().trim();
+  applyFilters();
+});
+
+/* Clear all filters */
+document.getElementById('clear-filters').addEventListener('click', () => {
+  activeFilter = 'all';
+  maxPrice = 800;
+  searchTerm = '';
+  slider.value = 800;
+  priceVal.textContent = 'All prices';
+  document.getElementById('search-input').value = '';
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('on'));
+  document.querySelector('[data-filter="all"]').classList.add('on');
+  applyFilters();
+});
+
+/* Run once on load */
+applyFilters();
+</script>
+</body>
+</html>
